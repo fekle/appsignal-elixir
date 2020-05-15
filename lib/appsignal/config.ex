@@ -47,11 +47,14 @@ defmodule Appsignal.Config do
 
     Application.put_env(:appsignal, :config_sources, sources)
 
-    config =
+    {_, config} =
       sources[:default]
       |> Map.merge(sources[:system])
       |> Map.merge(sources[:file])
       |> Map.merge(sources[:env])
+      |> Map.get_and_update(:filter_data_keys, fn current ->
+        {current, current ++ Application.get_env(:phoenix, :filter_parameters, [])}
+      end)
 
     # Config is valid when we have a push api key
     config =
@@ -142,6 +145,7 @@ defmodule Appsignal.Config do
       true -> Map.merge(config, %{running_in_container: true, log: "stdout"})
     end
   end
+
 
   defp load_from_application do
     Application.get_env(:appsignal, :config, []) |> coerce_map
