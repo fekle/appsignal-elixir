@@ -103,7 +103,7 @@ defmodule Appsignal.Mixfile do
 
     [
       {:benchee, "~> 1.0", only: :bench},
-      {:hackney, "~> 1.6"},
+      {:hackney, git: "https://github.com/benoitc/hackney.git", branch: "master"},
       {:jason, "~> 1.0", optional: true},
       {:poison, poison_version, optional: true},
       {:decorator, decorator_version},
